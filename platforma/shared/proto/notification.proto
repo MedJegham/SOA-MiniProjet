@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package notification;
+
+service NotificationService {
+  rpc SendNotification(NotificationRequest) returns (NotificationResponse);
+  rpc GetNotificationPreferences(UserIdRequest) returns (PreferencesResponse);
+  rpc UpdatePreferences(UpdatePreferencesRequest) returns (PreferencesResponse);
+  rpc GetNotificationHistory(UserIdRequest) returns (HistoryResponse);
+}
+
+// ============================================================================
+// MESSAGES
+// ============================================================================
+
+message NotificationRequest {
+  string userId = 1;
+  string type = 2;           // "email", "sms", "push"
+  string subject = 3;
+  string body = 4;
+  string recipientEmail = 5;
+  string recipientPhone = 6;
+  map<string, string> data = 7;  // Custom data (JSON)
+}
+
+message NotificationResponse {
+  bool success = 1;
+  string notificationId = 2;
+  string message = 3;
+}
+
+message UserIdRequest {
+  string userId = 1;
+}
+
+message Notification {
+  string id = 1;
+  string userId = 2;
+  string type = 3;
+  string subject = 4;
+  string body = 5;
+  string status = 6;         // "pending", "sent", "failed"
+  int64 createdAt = 7;
+  int64 sentAt = 8;
+  string failureReason = 9;
+}
+
+message PreferencesResponse {
+  string userId = 1;
+  bool emailNotifications = 2;
+  bool smsNotifications = 3;
+  bool pushNotifications = 4;
+  NotificationTypes types = 5;
+  int64 updatedAt = 6;
+}
+
+message NotificationTypes {
+  bool bookingConfirmed = 1;
+  bool bookingCancelled = 2;
+  bool paymentReceived = 3;
+  bool paymentFailed = 4;
+  bool reminderBeforeSlot = 5;
+}
+
+message UpdatePreferencesRequest {
+  string userId = 1;
+  bool emailNotifications = 2;
+  bool smsNotifications = 3;
+  bool pushNotifications = 4;
+  NotificationTypes types = 5;
+}
+
+message HistoryResponse {
+  repeated Notification notifications = 1;
+  int32 total = 2;
+}
