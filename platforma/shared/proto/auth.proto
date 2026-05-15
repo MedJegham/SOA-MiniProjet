@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package auth;
+
+service AuthService {
+  rpc Authenticate(AuthRequest) returns (AuthResponse);
+  rpc ValidateToken(TokenRequest) returns (TokenResponse);
+  rpc RegisterUser(RegisterRequest) returns (RegisterResponse);
+  rpc GetUserProfile(UserIdRequest) returns (UserProfile);
+  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse);
+}
+
+// ============================================================================
+// MESSAGES
+// ============================================================================
+
+message AuthRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message AuthResponse {
+  string token = 1;
+  string userId = 2;
+  string role = 3;
+  int64 expiresIn = 4;
+}
+
+message TokenRequest {
+  string token = 1;
+}
+
+message TokenResponse {
+  bool valid = 1;
+  string userId = 2;
+  string email = 3;
+  string role = 4;
+}
+
+message RegisterRequest {
+  string email = 1;
+  string password = 2;
+  string name = 3;
+  string role = 4; // "client" or "provider"
+}
+
+message RegisterResponse {
+  bool success = 1;
+  string userId = 2;
+  string message = 3;
+}
+
+message UserIdRequest {
+  string userId = 1;
+}
+
+message UserProfile {
+  string id = 1;
+  string email = 2;
+  string name = 3;
+  string role = 4;
+  int64 createdAt = 5;
+  int64 updatedAt = 6;
+}
+
+message UpdateProfileRequest {
+  string userId = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message UpdateProfileResponse {
+  bool success = 1;
+  UserProfile profile = 2;
+}

@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package booking;
+
+service BookingService {
+  rpc CreateSlot(CreateSlotRequest) returns (SlotResponse);
+  rpc BookSlot(BookSlotRequest) returns (BookingResponse);
+  rpc CancelBooking(CancelRequest) returns (CancelResponse);
+  rpc GetAvailableSlots(GetSlotsRequest) returns (SlotListResponse);
+  rpc ListBookings(ListBookingsRequest) returns (BookingListResponse);
+  rpc GetBooking(BookingIdRequest) returns (BookingDetailResponse);
+}
+
+// ============================================================================
+// MESSAGES
+// ============================================================================
+
+message CreateSlotRequest {
+  string serviceId = 1;
+  int64 startTime = 2;    // Unix timestamp in ms
+  int64 endTime = 3;      // Unix timestamp in ms
+  int32 capacity = 4;     // Max number of bookings
+  float price = 5;        // Price per slot
+}
+
+message SlotResponse {
+  bool success = 1;
+  string slotId = 2;
+  string message = 3;
+}
+
+message Slot {
+  string id = 1;
+  string serviceId = 2;
+  int64 startTime = 3;
+  int64 endTime = 4;
+  int32 capacity = 5;
+  int32 booked = 6;
+  float price = 7;
+  int64 createdAt = 8;
+}
+
+message BookSlotRequest {
+  string userId = 1;
+  string slotId = 2;
+}
+
+message BookingResponse {
+  bool success = 1;
+  string bookingId = 2;
+  string message = 3;
+}
+
+message Booking {
+  string id = 1;
+  string userId = 2;
+  string slotId = 3;
+  string status = 4;      // "confirmed", "pending", "cancelled"
+  int64 createdAt = 5;
+}
+
+message BookingDetail {
+  string id = 1;
+  string userId = 2;
+  Slot slot = 3;
+  string status = 4;
+  float totalPrice = 5;
+  int64 createdAt = 6;
+  int64 cancelledAt = 7;
+}
+
+message CancelRequest {
+  string bookingId = 1;
+  string reason = 2;
+}
+
+message CancelResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetSlotsRequest {
+  string serviceId = 1;
+  int64 date = 2;         // Date (timestamp in ms)
+  int64 startTime = 3;    // Optional: specific time range start
+  int64 endTime = 4;      // Optional: specific time range end
+}
+
+message SlotListResponse {
+  repeated Slot slots = 1;
+  int32 totalAvailable = 2;
+}
+
+message ListBookingsRequest {
+  string userId = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+}
+
+message BookingListResponse {
+  repeated BookingDetail bookings = 1;
+  int32 total = 2;
+}
+
+message BookingIdRequest {
+  string bookingId = 1;
+}
+
+message BookingDetailResponse {
+  BookingDetail booking = 1;
+}

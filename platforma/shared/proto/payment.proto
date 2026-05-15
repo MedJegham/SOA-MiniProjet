@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+package payment;
+
+service PaymentService {
+  rpc ProcessPayment(PaymentRequest) returns (PaymentResponse);
+  rpc RefundPayment(RefundRequest) returns (RefundResponse);
+  rpc GetPaymentStatus(PaymentIdRequest) returns (PaymentStatusResponse);
+  rpc GetInvoice(InvoiceRequest) returns (InvoiceResponse);
+  rpc ListPayments(ListPaymentsRequest) returns (PaymentListResponse);
+}
+
+// ============================================================================
+// MESSAGES
+// ============================================================================
+
+message PaymentRequest {
+  string bookingId = 1;
+  string userId = 2;
+  float amount = 3;
+  string method = 4;     // "card", "bank_transfer", "wallet"
+  string currency = 5;   // "USD", "EUR", "TND", etc
+}
+
+message PaymentResponse {
+  bool success = 1;
+  string paymentId = 2;
+  string status = 3;     // "pending", "completed", "failed"
+  string message = 4;
+}
+
+message PaymentIdRequest {
+  string paymentId = 1;
+}
+
+message PaymentStatusResponse {
+  string paymentId = 1;
+  string bookingId = 2;
+  string userId = 3;
+  float amount = 4;
+  string method = 5;
+  string status = 6;
+  int64 createdAt = 7;
+  int64 completedAt = 8;
+}
+
+message Payment {
+  string id = 1;
+  string bookingId = 2;
+  string userId = 3;
+  float amount = 4;
+  string method = 5;
+  string status = 6;
+  string currency = 7;
+  int64 createdAt = 8;
+  int64 completedAt = 9;
+}
+
+message RefundRequest {
+  string paymentId = 1;
+  string reason = 2;
+}
+
+message RefundResponse {
+  bool success = 1;
+  string message = 2;
+  float refundedAmount = 3;
+}
+
+message Invoice {
+  string id = 1;
+  string paymentId = 2;
+  string bookingId = 3;
+  float amount = 4;
+  string currency = 5;
+  int64 issuedAt = 6;
+  string pdfUrl = 7;
+  string status = 8;     // "pending", "sent", "viewed"
+}
+
+message InvoiceRequest {
+  string bookingId = 1;
+}
+
+message InvoiceResponse {
+  Invoice invoice = 1;
+}
+
+message ListPaymentsRequest {
+  string userId = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+  string status = 4;     // Optional filter
+}
+
+message PaymentListResponse {
+  repeated Payment payments = 1;
+  int32 total = 2;
+}
