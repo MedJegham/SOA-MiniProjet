@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" font-family="Segoe UI, Arial, sans-serif">
+  <!-- Background -->
+  <rect width="900" height="620" fill="#f8f9fa" rx="12"/>
+
+  <!-- Title -->
+  <text x="450" y="38" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a1a2e">Platforma — Architecture Microservices</text>
+
+  <!-- Client box -->
+  <rect x="350" y="60" width="200" height="50" rx="8" fill="#4361ee" stroke="#3a0ca3" stroke-width="1.5"/>
+  <text x="450" y="80" text-anchor="middle" font-size="13" font-weight="bold" fill="white">Client</text>
+  <text x="450" y="98" text-anchor="middle" font-size="11" fill="#c8d3ff">REST / GraphQL</text>
+
+  <!-- Arrow Client → Gateway -->
+  <line x1="450" y1="110" x2="450" y2="148" stroke="#4361ee" stroke-width="2" marker-end="url(#arrow-blue)"/>
+  <text x="460" y="133" font-size="10" fill="#555">HTTP</text>
+
+  <!-- API Gateway box -->
+  <rect x="300" y="150" width="300" height="60" rx="8" fill="#7209b7" stroke="#560bad" stroke-width="1.5"/>
+  <text x="450" y="174" text-anchor="middle" font-size="14" font-weight="bold" fill="white">API Gateway</text>
+  <text x="450" y="194" text-anchor="middle" font-size="11" fill="#e0b4ff">:3000 — REST + GraphQL + gRPC clients</text>
+
+  <!-- gRPC label -->
+  <text x="450" y="232" text-anchor="middle" font-size="10" fill="#7209b7" font-style="italic">gRPC (HTTP/2 + Protobuf)</text>
+
+  <!-- Arrows Gateway → Services -->
+  <line x1="340" y1="210" x2="160" y2="278" stroke="#7209b7" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
+  <line x1="400" y1="210" x2="330" y2="278" stroke="#7209b7" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
+  <line x1="500" y1="210" x2="570" y2="278" stroke="#7209b7" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
+  <line x1="560" y1="210" x2="740" y2="278" stroke="#7209b7" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
+
+  <!-- Auth Service -->
+  <rect x="60" y="280" width="180" height="70" rx="8" fill="#06d6a0" stroke="#05a87d" stroke-width="1.5"/>
+  <text x="150" y="304" text-anchor="middle" font-size="13" font-weight="bold" fill="white">auth-service</text>
+  <text x="150" y="322" text-anchor="middle" font-size="11" fill="#d0fff5">gRPC :50051</text>
+  <text x="150" y="338" text-anchor="middle" font-size="10" fill="#d0fff5">SQLite3 | JWT · bcrypt</text>
+
+  <!-- Booking Service -->
+  <rect x="270" y="280" width="180" height="70" rx="8" fill="#f77f00" stroke="#d62828" stroke-width="1.5"/>
+  <text x="360" y="304" text-anchor="middle" font-size="13" font-weight="bold" fill="white">booking-service</text>
+  <text x="360" y="322" text-anchor="middle" font-size="11" fill="#fff0d0">gRPC :50052</text>
+  <text x="360" y="338" text-anchor="middle" font-size="10" fill="#fff0d0">SQLite3 | créneaux · réservations</text>
+
+  <!-- Payment Service -->
+  <rect x="480" y="280" width="180" height="70" rx="8" fill="#e63946" stroke="#c1121f" stroke-width="1.5"/>
+  <text x="570" y="304" text-anchor="middle" font-size="13" font-weight="bold" fill="white">payment-service</text>
+  <text x="570" y="322" text-anchor="middle" font-size="11" fill="#ffd0d3">gRPC :50053</text>
+  <text x="570" y="338" text-anchor="middle" font-size="10" fill="#ffd0d3">SQLite3 | paiements · factures</text>
+
+  <!-- Notification Service -->
+  <rect x="690" y="280" width="180" height="70" rx="8" fill="#4cc9f0" stroke="#4895ef" stroke-width="1.5"/>
+  <text x="780" y="304" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a1a2e">notification-service</text>
+  <text x="780" y="322" text-anchor="middle" font-size="11" fill="#1a3a4a">gRPC :50054</text>
+  <text x="780" y="338" text-anchor="middle" font-size="10" fill="#1a3a4a">RxDB (NoSQL) | notifications</text>
+
+  <!-- Kafka broker -->
+  <rect x="300" y="430" width="300" height="55" rx="8" fill="#1a1a2e" stroke="#4361ee" stroke-width="2"/>
+  <text x="450" y="455" text-anchor="middle" font-size="14" font-weight="bold" fill="white">Kafka Broker</text>
+  <text x="450" y="474" text-anchor="middle" font-size="11" fill="#8899cc">:9092 — Confluent 7.5.0</text>
+
+  <!-- Arrows Services → Kafka -->
+  <line x1="150" y1="350" x2="340" y2="428" stroke="#555" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow-gray)"/>
+  <line x1="360" y1="350" x2="390" y2="428" stroke="#555" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow-gray)"/>
+  <line x1="570" y1="350" x2="510" y2="428" stroke="#555" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow-gray)"/>
+  <line x1="780" y1="350" x2="560" y2="428" stroke="#555" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow-gray)"/>
+
+  <!-- Kafka topics label -->
+  <text x="200" y="400" font-size="9" fill="#888">booking.confirmed</text>
+  <text x="370" y="415" font-size="9" fill="#888">payment.completed</text>
+  <text x="530" y="415" font-size="9" fill="#888">notification.sent</text>
+  <text x="640" y="400" font-size="9" fill="#888">user.registered</text>
+
+  <!-- Zookeeper -->
+  <rect x="620" y="430" width="140" height="55" rx="8" fill="#343a40" stroke="#6c757d" stroke-width="1.5"/>
+  <text x="690" y="455" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Zookeeper</text>
+  <text x="690" y="474" text-anchor="middle" font-size="10" fill="#adb5bd">coordination</text>
+  <line x1="600" y1="457" x2="620" y2="457" stroke="#6c757d" stroke-width="1.5" stroke-dasharray="4,2"/>
+
+  <!-- Legend -->
+  <rect x="30" y="520" width="840" height="80" rx="8" fill="white" stroke="#dee2e6" stroke-width="1"/>
+  <text x="50" y="542" font-size="11" font-weight="bold" fill="#333">Légende</text>
+  <line x1="50" y1="558" x2="90" y2="558" stroke="#7209b7" stroke-width="2"/>
+  <text x="95" y="562" font-size="10" fill="#555">gRPC synchrone (HTTP/2)</text>
+  <line x1="220" y1="558" x2="260" y2="558" stroke="#555" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="265" y="562" font-size="10" fill="#555">Kafka asynchrone (événements)</text>
+  <rect x="50" y="572" width="12" height="12" rx="2" fill="#06d6a0"/>
+  <text x="67" y="582" font-size="10" fill="#555">SQLite3 (SQL)</text>
+  <rect x="150" y="572" width="12" height="12" rx="2" fill="#4cc9f0"/>
+  <text x="167" y="582" font-size="10" fill="#555">RxDB/LokiJS (NoSQL)</text>
+  <rect x="270" y="572" width="12" height="12" rx="2" fill="#4361ee"/>
+  <text x="287" y="582" font-size="10" fill="#555">Client externe</text>
+  <rect x="370" y="572" width="12" height="12" rx="2" fill="#7209b7"/>
+  <text x="387" y="582" font-size="10" fill="#555">API Gateway</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#4361ee"/>
+    </marker>
+    <marker id="arrow-purple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7209b7"/>
+    </marker>
+    <marker id="arrow-gray" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#555"/>
+    </marker>
+  </defs>
+</svg>

@@ -9,6 +9,11 @@ Application microservices développée en Node.js dans le cadre du mini-projet S
 
 ## Architecture
 
+![Architecture Platforma](platforma/docs/architecture.svg)
+
+<details>
+<summary>Vue ASCII</summary>
+
 ```
 Client (REST / GraphQL)
         │
@@ -29,6 +34,7 @@ SQLite3     SQLite3    SQLite3    RxDB
                Kafka Broker :9092
 ```
 
+</details>
 ### Microservices
 
 | Service | Port gRPC | Base de données | Rôle |
@@ -93,6 +99,16 @@ npm run payment       # Payment Service   → :50053
 npm run notification  # Notification Svc  → :50054
 npm run gateway       # API Gateway       → :3000
 ```
+
+---
+
+## Captures d'écran
+
+| Apollo Sandbox | Postman — Réservation | Logs Kafka |
+|---|---|---|
+| ![Apollo](platforma/docs/screenshots/apollo-sandbox.png) | ![Postman](platforma/docs/screenshots/postman-booking.png) | ![Kafka](platforma/docs/screenshots/kafka-logs.png) |
+
+> Les captures sont disponibles dans [`platforma/docs/screenshots/`](platforma/docs/screenshots/).
 
 ---
 
