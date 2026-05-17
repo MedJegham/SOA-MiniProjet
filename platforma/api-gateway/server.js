@@ -91,6 +91,31 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok', service: 'api-gateway', timestamp: Date.now() });
 });
 
+// Aggregated health check across all backend gRPC services.
+// Probes each channel with a short deadline so orchestrators can detect
+// which specific service is unreachable without long timeouts.
+const probeClient = (client, timeoutMs = 1500) =>
+  new Promise((resolve) => {
+    const deadline = new Date(Date.now() + timeoutMs);
+    client.waitForReady(deadline, (err) => resolve(err ? 'down' : 'up'));
+  });
+
+app.get('/health/services', async (_req, res) => {
+  const [auth, booking, payment, notification] = await Promise.all([
+    probeClient(authClient),
+    probeClient(bookingClient),
+    probeClient(paymentClient),
+    probeClient(notificationClient),
+  ]);
+  const services = { auth, booking, payment, notification };
+  const allUp = Object.values(services).every((s) => s === 'up');
+  res.status(allUp ? 200 : 503).json({
+    gateway: 'up',
+    services,
+    timestamp: Date.now(),
+  });
+});
+
 // ---------- AUTH ----------
 app.post('/api/auth/register', async (req, res) => {
   try {
@@ -610,6 +635,7 @@ const startServer = async () => {
     logger.info(`REST API: http://localhost:${PORT}/api`);
     logger.info(`GraphQL: http://localhost:${PORT}/graphql`);
     logger.info(`Health: http://localhost:${PORT}/health`);
+    logger.info(`Health (services): http://localhost:${PORT}/health/services`);
   });
 };
 
