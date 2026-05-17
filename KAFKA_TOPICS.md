@@ -8,11 +8,14 @@ Kafka est utilisé pour découpler les microservices et permettre une communicat
 
 ## 📋 Topics Kafka
 
-### 1. Topic: `booking-created`
+> **Note :** Les noms de topics utilisés dans le code suivent la convention `topic.action` (ex: `booking.confirmed`).
+> La documentation ci-dessous utilise les noms réels du code.
+
+### 1. Topic: `booking.confirmed`
 
 **Producteur:** Booking Service  
 **Consommateurs:** Payment Service, Notification Service  
-**Objectif:** Notifier des nouvelles réservations
+**Objectif:** Notifier des nouvelles réservations confirmées
 
 #### Message Schema
 
@@ -523,3 +526,20 @@ docker-compose logs -f notification-service
 **Kafka Configuration Version:** 1.0  
 **Confluent Kafka:** 7.5.0  
 **Dernière mise à jour:** Mai 2026
+
+---
+
+## 🗂️ Correspondance topics code ↔ documentation
+
+| Topic (code) | Topic (ancienne doc) | Statut |
+|---|---|---|
+| `booking.confirmed` | `booking-created` | ✅ Actif |
+| `booking.cancelled` | `booking-cancelled` | ✅ Actif |
+| `payment.completed` | `payment-completed` | ✅ Actif |
+| `payment.failed` | `payment-failed` | ✅ Actif |
+| `payment.refunded` | `refund-completed` | ✅ Actif |
+| `invoice.generated` | `invoice-generated` | ✅ Actif |
+| `notification.sent` | — | ✅ Actif (interne) |
+| `user.registered` | `user-registered` | ✅ Actif |
+| `user.updated` | `user-updated` | ✅ Actif |
+| `slot.created` | `slot-available` | ✅ Actif |
