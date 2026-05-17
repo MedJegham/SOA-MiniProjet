@@ -15,6 +15,7 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const fs = require('fs');
 const { createLogger } = require('../../shared/logger');
+const { buildNotification } = require('./templates');
 
 const logger = createLogger('notification-service');
 
@@ -339,39 +340,6 @@ const GetNotificationHistory = async (call, callback) => {
 };
 
 // ============== KAFKA CONSUMER ==============
-
-/**
- * Build notification content based on event type
- */
-const buildNotification = (topic, event) => {
-  const templates = {
-    'user.registered': {
-      subject: 'Bienvenue sur Platforma !',
-      body: `Bonjour ${event.name || 'utilisateur'}, votre compte a été créé avec succès.`,
-    },
-    'booking.confirmed': {
-      subject: 'Réservation confirmée',
-      body: `Votre réservation #${event.bookingId} a été confirmée.`,
-    },
-    'booking.cancelled': {
-      subject: 'Réservation annulée',
-      body: `Votre réservation #${event.bookingId} a été annulée.`,
-    },
-    'payment.completed': {
-      subject: 'Paiement reçu',
-      body: `Votre paiement de ${event.amount} ${event.currency || 'TND'} a été traité avec succès.`,
-    },
-    'payment.failed': {
-      subject: 'Échec du paiement',
-      body: `Votre paiement pour la réservation #${event.bookingId} a échoué. Veuillez réessayer.`,
-    },
-    'invoice.generated': {
-      subject: 'Facture disponible',
-      body: `Votre facture #${event.invoiceId} est disponible. Montant: ${event.amount} ${event.currency || 'TND'}.`,
-    },
-  };
-  return templates[topic] || { subject: `Événement: ${topic}`, body: JSON.stringify(event) };
-};
 
 const startConsumer = async () => {
   const topics = [
