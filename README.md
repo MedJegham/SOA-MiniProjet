@@ -1,5 +1,10 @@
 # Platforma — Plateforme de Réservation Intelligente
 
+[![CI](https://github.com/MedJegham/SOA-MiniProjet/actions/workflows/ci.yml/badge.svg)](https://github.com/MedJegham/SOA-MiniProjet/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
 Application microservices développée en Node.js dans le cadre du mini-projet SoA & Microservices (A.U. 2025-26).
 
 ## Architecture
@@ -283,3 +288,16 @@ platforma/
 ├── .env.example
 └── package.json
 ```
+
+---
+
+## Contribuer
+
+Les contributions sont les bienvenues. Consultez [CONTRIBUTING.md](CONTRIBUTING.md)
+pour le flux de travail (branches, conventions de commit, lint, tests) avant
+d'ouvrir une Pull Request.
+
+## Licence
+
+Distribué sous licence MIT. Voir [LICENSE](LICENSE) pour le détail.
+
