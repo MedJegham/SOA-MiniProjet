@@ -48,7 +48,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/louaybenmansour/platforma.git"
+    "url": "git+https://github.com/MedJegham/SOA-MiniProjet.git"
   },
   "keywords": [
     "microservices",
@@ -57,8 +57,8 @@
     "nodejs",
     "soa"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "Med Jegham <med.jegham@polytechnicien.tn>, Louay Benmansour <louay.benmansour@polytechnicien.tn>",
+  "license": "MIT",
   "jest": {
     "testEnvironment": "node",
     "testTimeout": 30000,
