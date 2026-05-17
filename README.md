@@ -54,8 +54,8 @@ SQLite3     SQLite3    SQLite3    RxDB
 
 ```bash
 # Cloner le dépôt
-git clone https://github.com/louaybenmansour/platforma.git
-cd platforma
+git clone https://github.com/MedJegham/SOA-MiniProjet.git
+cd SOA-MiniProjet
 
 # Copier les variables d'environnement
 cp platforma/.env.example platforma/.env
@@ -92,6 +92,54 @@ npm run booking       # Booking Service   → :50052
 npm run payment       # Payment Service   → :50053
 npm run notification  # Notification Svc  → :50054
 npm run gateway       # API Gateway       → :3000
+```
+
+---
+
+## Script de démonstration
+
+Le script `scripts/demo.js` exécute un scénario métier complet en 14 étapes via l'API REST + GraphQL :
+
+```
+Inscription → Connexion → Profil → Créneau → Réservation
+→ Paiement → Facture → Notifications → Annulation → Remboursement
+```
+
+**Prérequis :** tous les services doivent être démarrés (`docker-compose up`).
+
+```bash
+cd platforma
+
+# Avec l'URL par défaut (localhost:3000)
+npm run demo
+
+# Avec une URL personnalisée
+node scripts/demo.js --base-url http://localhost:3000
+```
+
+Exemple de sortie :
+```
+╔══════════════════════════════════════════════╗
+║   Platforma — Démonstration scénario métier  ║
+╚══════════════════════════════════════════════╝
+  ℹ API Gateway : http://localhost:3000
+
+▶ 0. Health Check
+  ✔ API Gateway opérationnelle (status: ok)
+
+▶ 1. Inscription
+  ✔ Utilisateur créé — userId: usr-xxxxxxxx
+
+▶ 6. Réservation du créneau
+  ✔ Réservation confirmée — bookingId: bk-xxxxxxxx
+
+▶ 8. Traitement du paiement
+  ✔ Paiement traité — paymentId: pay-xxxxxxxx
+  ✔ Statut: completed
+...
+╔══════════════════════════════════════════════╗
+║         Scénario terminé avec succès !       ║
+╚══════════════════════════════════════════════╝
 ```
 
 ---
