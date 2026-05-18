@@ -124,7 +124,14 @@ app.post('/api/auth/register', async (req, res) => {
       return res.status(400).json({ error: 'email, password and name are required' });
     }
     const result = await grpcCall(authClient, 'registerUser', { email, password, name, role: role || 'client' });
-    res.status(201).json({ success: result.success, userId: result.userId, message: result.message });
+    const auth = await grpcCall(authClient, 'authenticate', { email, password });
+    res.status(201).json({
+      success: result.success,
+      userId: result.userId,
+      message: result.message,
+      token: auth.token,
+      role: auth.role,
+    });
   } catch (err) {
     const status = err.code === grpc.status.ALREADY_EXISTS ? 409 : 400;
     res.status(status).json({ error: err.details || err.message });
@@ -563,8 +570,9 @@ const resolvers = {
   },
   Mutation: {
     register: async (_, { email, password, name, role }) => {
-      const result = await grpcCall(authClient, 'registerUser', { email, password, name, role: role || 'client' });
-      return { token: '', userId: result.userId, role: role || 'client' };
+      await grpcCall(authClient, 'registerUser', { email, password, name, role: role || 'client' });
+      const auth = await grpcCall(authClient, 'authenticate', { email, password });
+      return { token: auth.token, userId: auth.userId, role: auth.role };
     },
     login: async (_, { email, password }) => {
       const result = await grpcCall(authClient, 'authenticate', { email, password });
