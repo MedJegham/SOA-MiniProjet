@@ -21,7 +21,15 @@ const logger = createLogger('auth-service');
 
 // ============== CONFIG ==============
 const GRPC_PORT = process.env.AUTH_GRPC_PORT || process.env.GRPC_PORT || 50051;
-const JWT_SECRET = process.env.JWT_SECRET || 'platforma-secret-change-in-prod';
+const DEFAULT_DEV_JWT_SECRET = 'platforma-secret-change-in-prod';
+if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
+  logger.error('JWT_SECRET est obligatoire en production. Démarrage interrompu.');
+  process.exit(1);
+}
+const JWT_SECRET = process.env.JWT_SECRET || DEFAULT_DEV_JWT_SECRET;
+if (JWT_SECRET === DEFAULT_DEV_JWT_SECRET) {
+  logger.warn('JWT_SECRET non défini : utilisation du secret de développement (NE PAS UTILISER EN PRODUCTION).');
+}
 const JWT_EXPIRY = '7d';
 const DB_PATH = process.env.AUTH_DB_PATH || process.env.DATABASE_PATH || './data/auth.db';
 const KAFKA_BROKER = process.env.KAFKA_BROKER || 'localhost:9092';
