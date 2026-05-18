@@ -163,6 +163,69 @@ Microservice C (Consumer)
     ├─ Persiste les changements
 ```
 
+### 5. Diagramme de séquence — Saga booking → payment → notification
+
+Ce diagramme illustre le scénario métier complet d'une réservation
+suivie d'un paiement, avec la chorégraphie événementielle Kafka
+qui relie les microservices.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Client
+    participant GW as API Gateway
+    participant BK as Booking Service
+    participant PY as Payment Service
+    participant NF as Notification Service
+    participant K as Kafka
+
+    Client->>GW: POST /api/bookings { slotId }
+    GW->>BK: gRPC BookSlot(userId, slotId)
+    BK->>BK: SQLite : INSERT booking + incr slot.booked
+    BK-->>GW: Booking { id, status=CONFIRMED }
+    GW-->>Client: 201 Created
+
+    BK->>K: publish booking.confirmed
+    K-->>NF: consume booking.confirmed
+    NF->>NF: RxDB : INSERT notification
+    NF->>NF: render template + envoi e-mail
+
+    Client->>GW: POST /api/payments { bookingId, amount }
+    GW->>PY: gRPC ProcessPayment(...)
+    PY->>PY: SQLite : INSERT payment + invoice
+    PY-->>GW: PaymentStatus { id, status=COMPLETED }
+    GW-->>Client: 200 OK
+
+    PY->>K: publish payment.completed
+    PY->>K: publish invoice.generated
+    K-->>NF: consume payment.completed
+    K-->>NF: consume invoice.generated
+    NF->>NF: e-mail "paiement confirmé" + "facture"
+
+    Note over Client,K: Scénario d'annulation
+    Client->>GW: DELETE /api/bookings/:id
+    GW->>BK: gRPC CancelBooking
+    BK->>K: publish booking.cancelled
+    K-->>PY: consume booking.cancelled
+    PY->>PY: SQLite : refund automatique
+    PY->>K: publish payment.refunded
+    K-->>NF: e-mail "remboursement"
+```
+
+**Points clés mis en évidence :**
+
+- L'API Gateway n'orchestre **pas** la saga : il se contente d'appeler
+  un microservice (gRPC) et de retourner la réponse au client. La
+  cohérence finale entre les services repose sur la **chorégraphie
+  Kafka** (chaque service réagit aux événements qui le concernent).
+- Le service `Notification` est purement consommateur Kafka : il
+  réagit à plusieurs topics métier et n'est jamais appelé en gRPC
+  par la Gateway. C'est la justification du choix Kafka pour le
+  découplage.
+- L'annulation d'une réservation déclenche automatiquement le
+  remboursement côté Payment via le topic `booking.cancelled`, sans
+  qu'aucun appel gRPC direct n'existe entre Booking et Payment.
+
 ---
 
 ## 🏢 Microservices
